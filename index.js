@@ -1,14 +1,23 @@
 const express = require("express");
-const server = express();
-const { signuproute } = require("./src/routes/auth.route");
-const dotenv = require("dotenv").config();
 const { connectDb } = require("./src/config/mongoDb");
-const PORT = process.env.PORT;
+const {
+  signupRoute,
+  loginRoute,
+  logoutRoute,
+} = require("./src/routes/auth.route");
+const dotenv = require("dotenv").config();
 
-server.use("/api/auth", signuproute);
+const server = express();
+server.use(express.json());
+
+server
+  .use("/api/auth", signupRoute)
+  .use("/api/auth", loginRoute)
+  .use("/api/auth", logoutRoute);
 
 connectDb()
   .then(() => {
+    const PORT = process.env.PORT;
     server.listen(PORT || 5000, () => {
       console.log(`Server is listening at port:${PORT}`);
     });
