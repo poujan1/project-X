@@ -5,13 +5,12 @@ const isLoggedIn = async (req, res, next) => {
     const token = req.cookies.jwt;
 
     if (!token) {
-      throw new Error("invalid token ");
+      throw new Error("Token is not provided ");
     }
     const decodedToken = await jwt.verify(token, process.env.JWT_SECRET_KEY);
-    console.log(decodedToken);
 
     if (!decodedToken) {
-      throw new Error("token not matched");
+      throw new Error("Token not matched");
     }
 
     const user = await User.findOne({ _id: decodedToken.userId }).select(
@@ -19,7 +18,7 @@ const isLoggedIn = async (req, res, next) => {
     );
 
     if (!user) {
-      throw new Error("no user found");
+      throw new Error(" user not found");
     }
 
     req.user = user;
