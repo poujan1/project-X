@@ -1,3 +1,4 @@
+const { verify } = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
@@ -20,19 +21,24 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     followers: {
-      type: String,
+      type: [String],
+      default: [],
     },
     profileImg: {
       type: String,
+      default: "",
     },
     coverImg: {
       type: String,
+      default: "",
     },
     bio: {
       type: String,
+      default: "",
     },
     link: {
       type: String,
+      default: "",
     },
   },
   { timestamps: true },

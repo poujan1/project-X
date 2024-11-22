@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const generateTokenAndSendCookie = require("../utils/generateJwtToken");
+
 const signupController = async (req, res) => {
   try {
     const { username, password, email, fullName } = req.body;
@@ -37,10 +38,51 @@ const signupController = async (req, res) => {
     res.status(400).send(error.message);
   }
 };
-const loginController = (req, res) => {
-  res.send("this is login controller");
+const loginController = async (req, res) => {
+  try {
+    const { username, password } = req?.body;
+    if (!username && !password) {
+      return res.status(400).send("requried fields");
+    }
+
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      return res.status(400).send("user not found!! sign Up");
+    }
+    const verifyPassword = await bcrypt.compare(password, user?.password || "");
+
+    if (!verifyPassword) {
+      return res.status(400).send("Incorrect password");
+    }
+    const cookie = await generateTokenAndSendCookie(user._id, res);
+  } catch (error) {
+    return res.status(400).send("Error");
+  }
+
+  res.send("logged in success");
 };
 const logoutController = (req, res) => {
-  res.send("this is logout controller");
+  try {
+    res.cookie("jwt", "", { maxAge: 0 });
+    res.status(200).send("logout succes");
+  } catch (error) {
+    res.send(error.message);
+  }
 };
-module.exports = { signupController, loginController, logoutController };
+
+const getLoggedInUser = (req, res) => {
+  try {
+    const user = req.user;
+    console.log(user);
+    // res.send(User.findOne(user._id));
+    res.send(user);
+  } catch (error) {
+    res.send(error);
+  }
+};
+module.exports = {
+  signupController,
+  loginController,
+  logoutController,
+  getLoggedInUser,
+};

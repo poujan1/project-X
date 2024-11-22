@@ -1,19 +1,15 @@
 const express = require("express");
 const { connectDb } = require("./src/config/mongoDb");
-const {
-  signupRoute,
-  loginRoute,
-  logoutRoute,
-} = require("./src/routes/auth.route");
+const authrouter = require("./src/routes/auth.route");
+const cookieParser = require("cookie-parser");
+
 const dotenv = require("dotenv").config();
 
 const server = express();
 server.use(express.json());
+server.use(cookieParser());
 
-server
-  .use("/api/auth", signupRoute)
-  .use("/api/auth", loginRoute)
-  .use("/api/auth", logoutRoute);
+server.use("/api/auth", authrouter);
 
 connectDb()
   .then(() => {
