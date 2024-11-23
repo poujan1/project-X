@@ -2,6 +2,7 @@ const express = require("express");
 const { connectDb } = require("./src/config/mongoDb");
 const authrouter = require("./src/routes/auth.route");
 const cookieParser = require("cookie-parser");
+const userAuth = require("./src/routes/auth.user.js");
 
 const dotenv = require("dotenv").config();
 
@@ -11,6 +12,7 @@ server.use(cookieParser());
 server.use(express.urlencoded({ extended: true }));
 
 server.use("/api/auth", authrouter);
+server.use("/api/user", userAuth);
 
 connectDb()
   .then(() => {
