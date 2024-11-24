@@ -26,18 +26,27 @@ const signupController = async (req, res) => {
 
     const encodedPassword = await bcrypt.hash(password, 10);
 
+    const isUsernameOrEmailAlreadyExist = await User.findOne({
+      $or: [{ username: username }, { email: email }],
+    });
+
+    if (isUsernameOrEmailAlreadyExist) {
+      return res.status(400).send("Username or email is already exist");
+    }
+
     const user = await new User({
       username: username,
       password: encodedPassword,
       email: email,
       fullName: fullName,
     });
+
     console.log(user);
 
     if (user) {
-      generateTokenAndSendCookie(user._id, res);
+      // generateTokenAndSendCookie(user._id, res);
       await user.save();
-      res.status(201).json({
+      return res.status(201).json({
         _id: user._id,
         email: user.email,
         fullName: user.fullName,
@@ -51,7 +60,7 @@ const signupController = async (req, res) => {
       return res.status(400).send("something went wrong");
     }
   } catch (error) {
-    res.status(400).send(error.message);
+    return res.status(400).send(error.message);
   }
 };
 const loginController = async (req, res) => {

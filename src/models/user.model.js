@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       require: true,
       unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
@@ -14,31 +15,43 @@ const userSchema = new mongoose.Schema(
     fullName: {
       type: String,
       required: true,
+      lowercase: true,
     },
     email: {
       type: String,
       unique: true,
       required: true,
+      lowercase: true,
     },
     followers: {
-      type: [String],
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
+    },
+    following: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "User",
       default: [],
     },
     profileImg: {
       type: String,
       default: "",
+      lowercase: true,
     },
     coverImg: {
       type: String,
       default: "",
+      lowercase: true,
     },
     bio: {
       type: String,
       default: "",
+      lowercase: true,
     },
     link: {
       type: String,
       default: "",
+      lowercase: true,
     },
   },
   { timestamps: true },
