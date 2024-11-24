@@ -5,6 +5,7 @@ const generateTokenAndSendCookie = require("../utils/generateJwtToken");
 const signupController = async (req, res) => {
   try {
     const { username, password, email, fullName } = req.body;
+
     const emailRegx = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
