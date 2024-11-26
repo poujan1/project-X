@@ -1,3 +1,4 @@
+const Notification = require("../models/notification.model");
 const User = require("../models/user.model");
 const mongoose = require("mongoose");
 
@@ -64,8 +65,13 @@ const followOrUnfollow = async (req, res) => {
       await User.findByIdAndUpdate(requestedUser._id, {
         $push: { followers: currentUser._id },
       });
+      const notification = await new Notification({
+        from: requestedUser._id,
+        to: currentUser._id,
+        type: "follow",
+      });
+      await notification.save();
     }
-
     return res.status(201).send("following unfollowing successful");
   } catch (error) {
     return res.status(400).send(`Error encountered :${error.message}`);
