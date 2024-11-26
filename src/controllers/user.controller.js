@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const mongoose = require("mongoose");
 
 const getUserProfile = async (req, res) => {
   try {
@@ -70,13 +71,80 @@ const followOrUnfollow = async (req, res) => {
     return res.status(400).send(`Error encountered :${error.message}`);
   }
 };
+const getSuggestedProfile = (req, res) => {
+  res.send("get suggestions ..");
+};
+
+/// optimized code using references (chatGpt).....
+// const followOrUnfollow = async (req, res) => {
+//   const session = await mongoose.startSession(); // Start a session for transaction (optional)
+//   try {
+//     const { id } = req.params;
+//     if (!id) {
+//       return res.status(400).send("Something went wrong in following the user");
+//     }
+
+//     const verifiedUser = req.user;
+//     if (!verifiedUser) {
+//       return res.status(400).send("Something went wrong");
+//     }
+//     const verifiedUserId = verifiedUser._id;
+//     if (id == verifiedUserId) {
+//       return res.status(400).send("Can't follow/unfollow self");
+//     }
+
+//     const requestedUser = await User.findById(id).session(session);
+//     const currentUser = verifiedUser;
+
+//     const isFollowing = currentUser.following.includes(requestedUser._id);
+
+// Start transaction
+//     session.startTransaction();
+
+//     if (isFollowing) {
+// Unfollow: remove user from both following and followers arrays
+//       await User.updateOne(
+//         { _id: currentUser._id },
+//         { $pull: { following: requestedUser._id } },
+//         { session },
+//       );
+//       await User.updateOne(
+//         { _id: requestedUser._id },
+//         { $pull: { followers: currentUser._id } },
+//         { session },
+//       );
+//     } else {
+// Follow: add user to both following and followers arrays
+//       await User.updateOne(
+//         { _id: currentUser._id },
+//         { $addToSet: { following: requestedUser._id } },
+//         { session },
+//       );
+//       await User.updateOne(
+//         { _id: requestedUser._id },
+//         { $addToSet: { followers: currentUser._id } },
+//         { session },
+//       );
+//     }
+
+// Commit the transaction
+//     await session.commitTransaction();
+//     session.endSession();
+
+//     return res.status(201).send("Following/Unfollowing successful");
+//   } catch (error) {
+//     await session.abortTransaction(); // Abort if any error occurs
+//     session.endSession();
+//     return res.status(400).send(`Error encountered: ${error.message}`);
+//   }
+// };
 
 // const updateProfile = (req, res) => {};
 // const getSuggestedProfile = (req, res) => {};
 
 module.exports = {
   getUserProfile,
-  // getSuggestedProfile,
+  getSuggestedProfile,
   followOrUnfollow,
   // updateProfile,
 };

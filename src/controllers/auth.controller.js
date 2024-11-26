@@ -61,7 +61,7 @@ const signupController = async (req, res) => {
       return res.status(400).send("something went wrong");
     }
   } catch (error) {
-    return res.status(400).send(error.message);
+    return res.status(400).send(`something went wrong ${error.message}`);
   }
 };
 const loginController = async (req, res) => {
