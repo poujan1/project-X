@@ -70,6 +70,7 @@ const followOrUnfollow = async (req, res) => {
         to: currentUser._id,
         type: "follow",
       });
+      console.log(notification);
       await notification.save();
     }
     return res.status(201).send("following unfollowing successful");
@@ -77,8 +78,27 @@ const followOrUnfollow = async (req, res) => {
     return res.status(400).send(`Error encountered :${error.message}`);
   }
 };
-const getSuggestedProfile = (req, res) => {
-  res.send("get suggestions ..");
+const getSuggestedProfile = async (req, res) => {
+  const currentUser = req.user._id;
+  // console.log(await User.findById(currentUser));
+  const userFollowedByme = await User.find({ _id: currentUser }).select(
+    "following",
+  );
+  console.log(userFollowedByme);
+  const user = await User.aggregate([
+    {
+      $match: {
+        _id: { $ne: currentUser },
+      },
+    },
+    {
+      $sample: {
+        size: 10,
+      },
+    },
+  ]);
+  // console.log(user);
+  res.send(user);
 };
 
 /// optimized code using references (chatGpt).....
