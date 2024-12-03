@@ -1,4 +1,4 @@
-const notification = require("../../models/notification.model.js");
+const Notification = require("../../models/notification.model.js");
 const User = require("../../models/user.model.js");
 const followOrUnfollow = async (req, res) => {
   try {
