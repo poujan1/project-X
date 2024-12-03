@@ -1,11 +1,9 @@
-const userContoller = require("../controllers/user.controller");
 const express = require("express");
-const {
-  getUserProfile,
-  getSuggestedProfile,
-  followOrUnfollow,
-  updateProfile,
-} = require("../controllers/user.controller.js");
+
+const getUserProfile = require("../controllers/user/getUserProfile.controller");
+const getSuggestedProfile = require("../controllers/user/getsuggestedprofile.controller");
+const followOrUnfollow = require("../controllers/user/followunfollow.controller");
+
 const isLoggedIn = require("../middlewares/is_logged_in_user");
 
 const router = express.Router();
