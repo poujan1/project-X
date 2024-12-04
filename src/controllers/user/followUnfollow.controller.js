@@ -43,7 +43,7 @@ const followOrUnfollow = async (req, res) => {
       console.log(notification);
       await notification.save();
     }
-    return res.status(201).send("following unfollowing successful");
+    return res.status(201).send("follow/unfollow successful");
   } catch (error) {
     return res.status(400).send(`Error encountered :${error.message}`);
   }
