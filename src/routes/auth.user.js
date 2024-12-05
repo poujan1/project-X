@@ -12,7 +12,7 @@ const router = express.Router();
 router.get("/profile/:username", isLoggedIn, getUserProfile),
   router.get("/suggested", isLoggedIn, getSuggestedProfile),
   router.post("/follow/:id", isLoggedIn, followOrUnfollow),
-  router.patch("/updateProfile", isLoggedIn, updateProfile);
-router.patch("/changePassword", isLoggedIn, changePassword);
+  router.patch("/updateProfile", isLoggedIn, updateProfile),
+  router.patch("/changePassword", isLoggedIn, changePassword);
 
 module.exports = router;

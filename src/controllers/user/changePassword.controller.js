@@ -28,7 +28,14 @@ const changePassword = async (req, res) => {
     return res.status(400).send("Try using valid old password");
   }
   const hashedPassword = await bcrypt.hash(newPassword, 10);
-  currentUser.password = hashedPassword;
-  await currentUser.save();
+  await User.findByIdAndUpdate(
+    currentUserId,
+    { $set: { password: hashedPassword } },
+    { new: true },
+    // Return the updated document
+  );
+  return res.status(201).json({
+    message: `password changed successfully`,
+  });
 };
 module.exports = changePassword;
