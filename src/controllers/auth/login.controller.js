@@ -6,7 +6,9 @@ const loginController = async (req, res) => {
   try {
     const { username, password } = req?.body;
     if (!username && !password) {
-      return res.status(400).send("please provide username and password");
+      return res
+        .status(400)
+        .json({ message: "please provide username and password" });
     }
 
     const user = await User.findOne({ username: username });

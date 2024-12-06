@@ -10,7 +10,9 @@ const signupController = async (req, res) => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
 
     if (!username || !password || !email || !fullName) {
-      return res.send("username,password ,email and fullname are required");
+      return res.status(400).json({
+        Error: "Username,Password ,Email and Fullname are Required",
+      });
     }
     if (!emailRegx.test(email)) {
       return res.send("Please provide valid email address");
