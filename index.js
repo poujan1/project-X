@@ -4,6 +4,7 @@ const authRouter = require("./src/routes/auth.route");
 const cookieParser = require("cookie-parser");
 const userRouter = require("./src/routes/auth.user.js");
 const cloudinary = require("cloudinary").v2;
+const postRouter = require("./src/routes/post.route.js");
 
 const dotenv = require("dotenv").config();
 cloudinary.config({
@@ -19,6 +20,7 @@ server.use(express.urlencoded({ extended: true }));
 
 server.use("/api/auth", authRouter);
 server.use("/api/user", userRouter);
+server.use("/api/posts", postRouter);
 
 connectDb()
   .then(() => {
