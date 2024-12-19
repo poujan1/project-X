@@ -1,5 +1,6 @@
 const Notification = require("../../models/notification.model");
 const Post = require("../../models/post.model");
+const User = require("../../models/user.model");
 
 const likeUnlikePostController = async (req, res) => {
   const postId = req.params.id;
@@ -15,6 +16,7 @@ const likeUnlikePostController = async (req, res) => {
     if (!post) {
       return res.send(400).send("something went wrong");
     }
+    // unlike post
     if (post.likes.includes(currentUser)) {
       await Post.updateOne(
         { _id: postId },
@@ -24,8 +26,18 @@ const likeUnlikePostController = async (req, res) => {
           },
         },
       );
+      await User.updateOne(
+        { _id: currentUser },
+        {
+          $pull: {
+            likedpost: postId,
+          },
+        },
+      );
+
       return res.status(200).send("post unliked");
     } else {
+      // liked post
       await Post.updateOne(
         {
           _id: postId,
@@ -33,6 +45,14 @@ const likeUnlikePostController = async (req, res) => {
         {
           $push: {
             likes: currentUser,
+          },
+        },
+      );
+      await User.updateOne(
+        { _id: currentUser },
+        {
+          $push: {
+            likedpost: postId,
           },
         },
       );
